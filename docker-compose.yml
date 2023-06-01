@@ -1,0 +1,32 @@
+version: '1'
+
+services:
+  api:
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    volumes:
+      - .:/home/node
+      - /home/node/node_modules
+    ports:
+      - 4000:4000
+    command: yarn dev
+    depends_on:
+      - postgres
+  
+  postgres:
+    image: postgres
+    container_name: small_view_database
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=local
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_DB=small_view
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local
